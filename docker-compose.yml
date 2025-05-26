@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=mkt-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=q
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: gunicorn mkt.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - SECRET_KEY=your-secret-key
+      - DEBUG=False
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DATABASE_NAME=mkt-db
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=q
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - PROMETHEUS_METRICS_EXPORT_PORT=8001
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+  prometheus_data:
+  grafana_data:

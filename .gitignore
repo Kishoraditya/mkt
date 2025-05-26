@@ -1,0 +1,472 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Django specific
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Static files (collected by Django)
+/static/
+/staticfiles/
+
+# Media files
+/media/
+
+# Cache
+/cache/
+
+# Logs directory
+/logs/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Database
+*.sqlite3
+*.db
+
+# Wagtail specific
+/wagtail_cache/
+
+# Node.js (if using frontend build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Frontend build artifacts
+/assets/
+/webpack-stats.json
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Monitoring and metrics data
+/prometheus/data/
+/grafana/data/
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Local configuration overrides
+local_settings.py
+settings_local.py
+
+# Collected static files
+/collected_static/
+
+# Webpack bundles
+/bundles/
+/webpack-stats.json
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# pytest
+.pytest_cache/
+
+# Jupyter notebooks
+*.ipynb
+
+# Temporary scripts (as requested)
+*_temp.sh
+*_test.sh
+check_*.sh
+fix_*.sh
+generate_*.sh
+import_*.sh
+install_*.sh
+restart_*.sh
+setup_*.sh
+start_*.sh
+test_*.sh
+/scripts/temp/
+
+# Backup URLs files
+mkt/urls.py.backup
+
+# Temporary JSON files
+/tmp/
+dashboard_import.json
+
+# Local development files
+.local/
+.cache/
+
+# Monitoring temporary files
+/monitoring/temp/
+
+# Documentation build
+/docs/_build/
+/docs/build/
+
+# Local database dumps
+*.sql
+*.dump
+
+# Redis dump
+dump.rdb
+
+# Elasticsearch data
+/elasticsearch/
+
+# Local email backend files
+sent_emails/
+
+# Sentry configuration
+.sentryclirc
+
+# Terraform (if used for infrastructure)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Ansible (if used for deployment)
+*.retry
+
+# Local override files
+docker-compose.local.yml
+docker-compose.override.yml
+
+# Performance profiling
+*.prof
+
+# Memory profiling
+*.mprof
+
+# Local search index
+/search_index/
+
+# Wagtail search index
+/wagtail_search/
+
+# Local file uploads during development
+/uploads/
+
+# Temporary migration files
+*_temp_migration.py
+
+# Local configuration
+config.local.json
+settings.local.json
+
+# API keys and secrets (additional safety)
+*secret*
+*key*
+*token*
+*password*
+.secrets/
+
+# Monitoring dashboards exports
+*_export.json
+
+# Local Prometheus data
+/prometheus/data/
+/prometheus/wal/
+
+# Local Grafana data
+/grafana/data/
+/grafana/logs/
+/grafana/plugins/
+
+# Docker volumes data
+/docker-data/
+
+# Local SSL certificates
+/ssl/
+/certs/
+
+# Local backup files
+/backups/
+*.backup
+
+# Development database fixtures
+/fixtures/local/
+
+# Local media processing
+/media_processing/
+
+# Temporary uploads
+/temp_uploads/
+
+# Local search backends
+/whoosh_index/
+/elasticsearch_data/
+
+# Local cache backends
+/redis_data/
+/memcached_data/
+
+# Development tools
+.pre-commit-config.yaml.local
+.flake8.local
+.pylintrc.local
+
+# Local documentation
+/docs/local/
+
+# Performance monitoring
+/performance_logs/
+
+# Local monitoring data
+/monitoring_data/
+
+# Temporary API responses
+api_responses_*.json
+
+# Local development scripts
+dev_*.py
+local_*.py
+temp_*.py
+
+# Editor swap files
+.*.swp
+.*.swo
+
+# Local configuration overrides
+local.py
+development.py
+production.local.py
+
+# Temporary database files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Local search configurations
+search_config.local.json
+
+# Temporary image processing
+/temp_images/
+
+# Local CDN files
+/cdn_local/
+
+# Development email files
+/dev_emails/
+
+# Local translation files
+/locale/local/
+
+# Temporary export files
+export_*.csv
+export_*.json
+export_*.xml
+
+# Local development certificates
+dev_cert.*
+localhost.*
+
+# Temporary monitoring exports
+monitoring_export_*.json
+
+# Local development overrides
+override_*.py
+custom_*.py
+
+# Temporary scripts (add to existing .gitignore)
+*_temp.sh
+*_test.sh
+*_setup.sh
+*_fix.sh
+*_check.sh
+*_generate.sh
+*_import.sh
+*_start.sh
+*_cleanup.sh
+cleanup_*.sh
+fix_*.sh
+setup_*.sh
+test_*.sh
+check_*.sh
+generate_*.sh
+import_*.sh
+start_*.sh
+enable_*.sh
+final_*.sh
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# Temporary JSON files
+*_import.json
+dashboard_*.json
+/tmp/
+
+temp/
+/temp/
+/temp/context.md
+
+monitoring/prometheus/

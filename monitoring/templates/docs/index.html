@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="documentation">
+    <div class="sidebar">
+        <h3>Documentation</h3>
+        <ul>
+            <li><a href="#overview">Project Overview</a></li>
+            <li><a href="#blog">Blog App</a></li>
+            <li><a href="#monitoring">Monitoring</a></li>
+            <li><a href="#api">API Reference</a></li>
+            <li><a href="#deployment">Deployment</a></li>
+        </ul>
+    </div>
+    
+    <div class="content">
+        <section id="overview">
+            <h1>MKT Project Documentation</h1>
+            <p>Welcome to the MKT project documentation. This guide provides information about the project's architecture, components, and usage.</p>
+            
+            <h2>Project Overview</h2>
+            <p>MKT is a Django-based web application built with Wagtail CMS. It includes a feature-rich blog system and comprehensive monitoring capabilities.</p>
+            
+            <h3>Key Features</h3>
+            <ul>
+                <li>SEO-optimized blog with categories, tags, and authors</li>
+                <li>REST API for content access</li>
+                <li>Real-time monitoring with Prometheus and Grafana</li>
+                <li>Performance metrics and event tracking</li>
+            </ul>
+            
+            <h3>Technology Stack</h3>
+            <ul>
+                <li>Django 5.2</li>
+                <li>Wagtail CMS</li>
+                <li>PostgreSQL</li>
+                <li>Django REST Framework</li>
+                <li>Prometheus</li>
+                <li>Grafana</li>
+            </ul>
+        </section>
+        
+        <section id="blog">
+            <h2>Blog App</h2>
+            <p>The blog app provides a feature-rich blogging platform with SEO optimization, categorization, and analytics.</p>
+            
+            <h3>Models</h3>
+            <ul>
+                <li><strong>BlogIndexPage</strong>: Main blog listing page</li>
+                <li><strong>BlogPost</strong>: Individual blog post with rich content</li>
+                <li><strong>BlogCategory</strong>: Categories for organizing posts</li>
+                <li><strong>BlogAuthor</strong>: Author information linked to Django users</li>
+            </ul>
+            
+            <h3>Features</h3>
+            <ul>
+                <li>Rich text editing with StreamField</li>
+                <li>Category and tag filtering</li>
+                <li>Author profiles</li>
+                <li>Reading time estimation</li>
+                <li>View counting</li>
+                <li>Related posts</li>
+            </ul>
+            
+            <h3>Templates</h3>
+            <p>The blog app includes responsive templates for:</p>
+            <ul>
+                <li>Blog index page</li>
+                <li>Blog post detail page</li>
+                <li>Category and tag filtered views</li>
+            </ul>
+            
+            <h3>API</h3>
+            <p>The blog API provides endpoints for:</p>
+            <ul>
+                <li>Listing blog posts with filtering and pagination</li>
+                <li>Retrieving blog post details</li>
+                <li>Listing categories and authors</li>
+                <li>Retrieving blog statistics</li>
+            </ul>
+        </section>
+        
+        <section id="monitoring">
+            <h2>Monitoring</h2>
+            <p>The monitoring app provides real-time tracking of application performance, events, and metrics.</p>
+            
+            <h3>Components</h3>
+            <ul>
+                <li><strong>Django Monitoring App</strong>: Collects and displays events and metrics</li>
+                <li><strong>Prometheus Integration</strong>: Collects time-series metrics</li>
+                <li><strong>Grafana Dashboards</strong>: Visualizes metrics</li>
+            </ul>
+            
+            <h3>Features</h3>
+            <ul>
+                <li>Event logging and tracking</li>
+                <li>Performance metric collection</li>
+                <li>Real-time dashboard</li>
+                <li>API performance monitoring</li>
+                <li>System health tracking</li>
+                <li>Custom event and metric recording</li>
+            </ul>
+            
+            <h3>Dashboard</h3>
+            <p>The monitoring dashboard provides:</p>
+            <ul>
+                <li>Recent events with type, source, and timestamp</li>
+                <li>Event type distribution charts</li>
+                <li>Performance metrics visualization</li>
+                <li>System health status</li>
+                <li>API performance metrics</li>
+            </ul>
+            
+            <h3>Setup</h3>
+            <p>For detailed setup instructions, see the <a href="/docs/monitoring_setup/">Monitoring Setup Guide</a>.</p>
+        </section>
+        
+        <section id="api">
+            <h2>API Reference</h2>
+            <p>MKT provides a comprehensive REST API for accessing blog content and monitoring data.</p>
+            
+            <h3>Blog API</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>/blog/api/posts/</td>
+                        <td>GET</td>
+                        <td>List all blog posts with pagination</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/posts/?category=slug</td>
+                        <td>GET</td>
+                        <td>Filter posts by category</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/posts/?tag=name</td>
+                        <td>GET</td>
+                        <td>Filter posts by tag</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/posts/&lt;slug&gt;/</td>
+                        <td>GET</td>
+                        <td>Get details for a specific post</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/categories/</td>
+                        <td>GET</td>
+                        <td>List all blog categories</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/authors/</td>
+                        <td>GET</td>
+                        <td>List all blog authors</td>
+                    </tr>
+                    <tr>
+                        <td>/blog/api/stats/</td>
+                        <td>GET</td>
+                        <td>Get blog statistics</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Monitoring API</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>/monitoring/api/events/</td>
+                        <td>GET</td>
+                        <td>List all monitoring events</td>
+                    </tr>
+                    <tr>
+                        <td>/monitoring/api/events/</td>
+                        <td>POST</td>
+                        <td>Create a new monitoring event</td>
+                    </tr>
+                    <tr>
+                        <td>/monitoring/api/metrics/</td>
+                        <td>GET</td>
+                        <td>List all performance metrics</td>
+                    </tr>
+                    <tr>
+                        <td>/monitoring/api/metrics/</td>
+                        <td>POST</td>
+                        <td>Create a new performance metric</td>
+                    </tr>
+                    <tr>
+                        <td>/monitoring/api/stats/</td>
+                        <td>GET</td>
+                        <td>Get monitoring statistics</td>
+                    </tr>
+                    <tr>
+                        <td>/monitoring/api/log-event/</td>
+                        <td>POST</td>
+                        <td>Log a new monitoring event</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Authentication</h3>
+            <p>API endpoints require authentication using one of the following methods:</p>
+            <ul>
+                <li>Session authentication (for browser-based access)</li>
+                <li>Token authentication (for programmatic access)</li>
+            </ul>
+        </section>
+        
+        <section id="deployment">
+            <h2>Deployment</h2>
+            <p>This section provides guidance on deploying the MKT application to production environments.</p>
+            
+            <h3>Requirements</h3>
+            <ul>
+                <li>Python 3.10+</li>
+                <li>PostgreSQL 14+</li>
+                <li>Nginx or Apache</li>
+                <li>Gunicorn or uWSGI</li>
+                <li>Prometheus (for monitoring)</li>
+                <li>Grafana (for dashboards)</li>
+            </ul>
+            
+            <h3>Environment Variables</h3>
+            <p>Configure the following environment variables:</p>
+            <pre><code>
+SECRET_KEY=your-secure-secret-key
+DEBUG=False
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+DATABASE_NAME=mkt-db
+DATABASE_USER=db-user
+DATABASE_PASSWORD=secure-password
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+PROMETHEUS_METRICS_EXPORT_PORT=8001
+            </code></pre>
+            
+            <h3>Deployment Steps</h3>
+            <ol>
+                <li>Clone the repository</li>
+                <li>Create and activate a virtual environment</li>
+                <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+                <li>Configure environment variables</li>
+                <li>Run migrations: <code>python manage.py migrate</code></li>
+                <li>Collect static files: <code>python manage.py collectstatic</code></li>
+                <li>Set up Gunicorn or uWSGI</li>
+                <li>Configure Nginx or Apache</li>
+                <li>Set up Prometheus and Grafana</li>
+                <li>Configure SSL with Let's Encrypt</li>
+            </ol>
+            
+            <h3>Monitoring Setup</h3>
+            <p>For detailed monitoring setup instructions, see the <a href="/docs/monitoring_setup/">Monitoring Setup Guide</a>.</p>
+        </section>
+    </div>
+</div>
+
+<style>
+    .documentation {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .sidebar {
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+    
+    .sidebar h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .sidebar a {
+        text-decoration: none;
+        color: #495057;
+        display: block;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+    
+    .sidebar a:hover {
+        background-color: #e9ecef;
+        color: #212529;
+    }
+    
+    .content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .content section {
+        margin-bottom: 3rem;
+    }
+    
+    .content h1 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        color: #212529;
+    }
+    
+    .content h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+        color: #343a40;
+    }
+    
+    .content h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #495057;
+    }
+    
+    .content p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    
+    .content ul, .content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+    
+    .content li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .api-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+    
+    .api-table th, .api-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .api-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    
+    .api-table tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    pre {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+    }
+    
+    code {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.875em;
+    }
+    
+    @media (max-width: 768px) {
+        .documentation {
+            grid-template-columns: 1fr;
+        }
+        
+        .sidebar {
+            position: static;
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+{% endblock %}

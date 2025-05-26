@@ -1,0 +1,287 @@
+<!-- blog/templates/blog/blog_index_page.html -->
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="blog-index">
+    <header class="blog-header">
+        <h1>
+            {% if page_title %}
+                {{ page_title }}
+            {% else %}
+                {{ page.title }}
+            {% endif %}
+        </h1>
+        {% if page.intro %}
+            <div class="blog-intro">
+                {{ page.intro|richtext }}
+            </div>
+        {% endif %}
+    </header>
+
+    <!-- Category Filter -->
+    <div class="blog-filters">
+        <div class="categories">
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="{{ page.url }}" {% if not current_category %}class="active"{% endif %}>All</a></li>
+                {% for category in categories %}
+                    <li>
+                        <a href="{{ page.url }}category/{{ category.slug }}/" 
+                           {% if current_category.slug == category.slug %}class="active"{% endif %}>
+                            {{ category.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Blog Posts -->
+    <div class="blog-posts">
+        {% for post in blog_posts %}
+            <article class="blog-post-preview">
+                {% if post.featured_image %}
+                    <div class="post-image">
+                        <a href="{{ post.url }}">
+                            {% image post.featured_image width-400 as img %}
+                            <img src="{{ img.url }}" alt="{{ post.title }}" loading="lazy">
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <div class="post-content">
+                    <header>
+                        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                        <div class="post-meta">
+                            <time datetime="{{ post.date|date:'c' }}">{{ post.date|date:'M d, Y' }}</time>
+                            {% if post.author %}
+                                <span class="author">by {{ post.author.name }}</span>
+                            {% endif %}
+                            <span class="reading-time">{{ post.estimated_reading_time }} min read</span>
+                            <span class="view-count">{{ post.view_count }} views</span>
+                        </div>
+                    </header>
+                    
+                    <div class="post-excerpt">
+                        <p>{{ post.excerpt }}</p>
+                    </div>
+                    
+                    <div class="post-categories">
+                        {% for category in post.categories.all %}
+                            <a href="{{ page.url }}category/{{ category.slug }}/" class="category-tag">
+                                {{ category.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="post-tags">
+                        {% for tag in post.tags.all %}
+                            <a href="{{ page.url }}tag/{{ tag.name }}/" class="tag">
+                                #{{ tag.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p>No blog posts yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if blog_posts.has_other_pages %}
+        <nav class="pagination">
+            <ul>
+                {% if blog_posts.has_previous %}
+                    <li><a href="?page={{ blog_posts.previous_page_number }}">&laquo; Previous</a></li>
+                {% endif %}
+                
+                {% for num in blog_posts.paginator.page_range %}
+                    {% if blog_posts.number == num %}
+                        <li class="current">{{ num }}</li>
+                    {% else %}
+                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if blog_posts.has_next %}
+                    <li><a href="?page={{ blog_posts.next_page_number }}">Next &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+
+<style>
+.blog-index {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.blog-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.blog-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.blog-intro {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.blog-filters {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.categories ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.categories a {
+    padding: 0.5rem 1rem;
+    background: white;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.categories a:hover,
+.categories a.active {
+    background: #007bff;
+    color: white;
+}
+
+.blog-posts {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.blog-post-preview {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.blog-post-preview:hover {
+    transform: translateY(-5px);
+}
+
+.post-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.post-content h2 {
+    margin: 0 0 1rem 0;
+}
+
+.post-content h2 a {
+    text-decoration: none;
+    color: #333;
+}
+
+.post-content h2 a:hover {
+    color: #007bff;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.post-excerpt {
+    margin-bottom: 1rem;
+}
+
+.post-categories,
+.post-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-tag,
+.tag {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.category-tag {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.tag {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.pagination ul {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination a,
+.pagination .current {
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination .current {
+    background: #007bff;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .blog-post-preview {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .categories ul {
+        flex-wrap: wrap;
+    }
+    
+    .post-meta {
+        flex-wrap: wrap;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% endblock %}
+        </title>
+        {% if page.search_description %}
+        <meta name="description" content="{{ page.search_description }}" />
+        {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Force all links in the live preview panel to be opened in a new tab #}
+        {% if request.in_preview_panel %}
+        <base target="_blank">
+        {% endif %}
+
+        {# Global stylesheets #}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mkt.css' %}">
+
+        {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">MKT</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/blog/">Blog</a>
+                        </li>
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/monitoring/dashboard/">Monitoring</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/logout/">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/login/">Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container my-4">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bg-dark text-light py-4 mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; 2024 MKT. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="/blog/api/posts/" class="text-light me-3">API</a>
+                        <a href="/admin/" class="text-light">Admin</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        {# Global javascript #}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="{% static 'js/mkt.js' %}"></script>
+
+        {% block extra_js %}
+        {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

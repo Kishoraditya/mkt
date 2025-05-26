@@ -1,0 +1,493 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+<style>
+    .dashboard {
+        padding: 2rem;
+    }
+    
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dashboard-header p {
+        color: #666;
+    }
+    
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .dashboard-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1.5rem;
+    }
+    
+    .dashboard-card h2 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+    }
+    
+    .event-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .event-item {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .event-item:last-child {
+        border-bottom: none;
+    }
+    
+    .event-type {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        margin-right: 0.75rem;
+        min-width: 60px;
+        text-align: center;
+    }
+    
+    .event-type.error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .event-type.warning {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .event-type.info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .event-type.debug {
+        background: #d6d8d9;
+        color: #383d41;
+    }
+    
+    .event-content {
+        flex: 1;
+    }
+    
+    .event-message {
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+    }
+    
+    .event-meta {
+        display: flex;
+        font-size: 0.8rem;
+        color: #666;
+    }
+    
+    .event-source {
+        margin-right: 1rem;
+    }
+    
+    .metric-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .metric-item {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .metric-item:last-child {
+        border-bottom: none;
+    }
+    
+    .metric-name {
+        font-weight: 500;
+    }
+    
+    .metric-value {
+        font-family: monospace;
+        background: #f8f9fa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .chart-container {
+        height: 300px;
+        margin-top: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <header class="dashboard-header">
+        <h1>Monitoring Dashboard</h1>
+        <p>Real-time monitoring and performance metrics for the MKT application.</p>
+    </header>
+    
+    <div class="dashboard-grid">
+        <!-- Recent Events Card -->
+        <div class="dashboard-card">
+            <h2>Recent Events</h2>
+            <div class="event-list">
+                {% for event in recent_events %}
+                <div class="event-item">
+                    <div class="event-type {{ event.event_type }}">
+                        {{ event.event_type|upper }}
+                    </div>
+                    <div class="event-content">
+                        <div class="event-message">{{ event.message }}</div>
+                        <div class="event-meta">
+                            <div class="event-source">{{ event.source }}</div>
+                            <div class="event-time">{{ event.timestamp|date:"M d, Y H:i:s" }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No events recorded yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Event Types Chart -->
+        <div class="dashboard-card">
+            <h2>Event Types</h2>
+            <div class="chart-container">
+                <canvas id="eventTypesChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Metrics Card -->
+        <div class="dashboard-card">
+            <h2>Recent Metrics</h2>
+            <div class="metric-list">
+                {% for metric in recent_metrics %}
+                <div class="metric-item">
+                    <div class="metric-name">{{ metric.name }}</div>
+                    <div class="metric-value">{{ metric.value }} {{ metric.unit }}</div>
+                </div>
+                {% empty %}
+                <p>No metrics recorded yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Performance Chart -->
+        <div class="dashboard-card">
+            <h2>Performance Metrics</h2>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-grid">
+        <!-- System Health Card -->
+        <div class="dashboard-card">
+            <h2>System Health</h2>
+            <div id="systemHealth">
+                <p>Loading system health data...</p>
+            </div>
+        </div>
+        
+        <!-- API Performance Card -->
+        <div class="dashboard-card">
+            <h2>API Performance</h2>
+            <div class="chart-container">
+                <canvas id="apiPerformanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="monitoring-dashboard">
+    <h1>📊 Monitoring Dashboard</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="metric-card text-center">
+                <div class="metric-value">{{ total_events }}</div>
+                <div class="metric-label">Total Events</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card text-center">
+                <div class="metric-value">{{ avg_response_time }}s</div>
+                <div class="metric-label">Avg Response Time</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card text-center">
+                <div class="metric-value">{{ event_counts|length }}</div>
+                <div class="metric-label">Event Types</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card text-center">
+                <div class="metric-value">✅</div>
+                <div class="metric-label">System Status</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Events</h5>
+                </div>
+                <div class="card-body">
+                    <div class="event-list">
+                        {% for event in recent_events %}
+                        <div class="event-item">
+                            <div class="d-flex justify-content-between">
+                                <span class="event-type-{{ event.event_type }}">
+                                    {{ event.get_event_type_display }}
+                                </span>
+                                <small class="text-muted">{{ event.timestamp|timesince }} ago</small>
+                            </div>
+                            <div class="mt-1">
+                                <strong>{{ event.source }}</strong>: {{ event.message }}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">No events recorded yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Event Distribution</h5>
+                </div>
+                <div class="card-body">
+                    {% for event_count in event_counts %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="event-type-{{ event_count.event_type }}">
+                            {{ event_count.event_type|title }}
+                        </span>
+                        <span class="badge bg-secondary">{{ event_count.count }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No event data available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>External Monitoring Links</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="http://localhost:9090" target="_blank" class="btn btn-outline-primary w-100">
+                                📈 Prometheus
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="http://localhost:3000" target="_blank" class="btn btn-outline-success w-100">
+                                📊 Grafana
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/metrics" target="_blank" class="btn btn-outline-info w-100">
+                                🔢 Raw Metrics
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    // Event Types Chart
+    const eventTypesCtx = document.getElementById('eventTypesChart').getContext('2d');
+    const eventTypesChart = new Chart(eventTypesCtx, {
+        type: 'pie',
+        data: {
+            labels: [{% for event in event_counts %}'{{ event.event_type|upper }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                data: [{% for event in event_counts %}{{ event.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: [
+                    '#f8d7da',
+                    '#fff3cd',
+                    '#d1ecf1',
+                    '#d6d8d9'
+                ],
+                borderColor: [
+                    '#721c24',
+                    '#856404',
+                    '#0c5460',
+                    '#383d41'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                }
+            }
+        }
+    });
+    
+    // Performance Chart (placeholder - would be populated with real data)
+    const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+    const performanceChart = new Chart(performanceCtx, {
+        type: 'line',
+        data: {
+            labels: ['1h ago', '50m ago', '40m ago', '30m ago', '20m ago', '10m ago', 'Now'],
+            datasets: [{
+                label: 'CPU Usage (%)',
+                data: [25, 30, 45, 60, 40, 35, 30],
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Memory Usage (%)',
+                data: [40, 42, 45, 50, 55, 60, 65],
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+    
+    // API Performance Chart (placeholder - would be populated with real data)
+    const apiPerformanceCtx = document.getElementById('apiPerformanceChart').getContext('2d');
+    const apiPerformanceChart = new Chart(apiPerformanceCtx, {
+        type: 'bar',
+        data: {
+            labels: ['/api/blog/', '/api/blog/posts/', '/api/monitoring/', '/api/stats/'],
+            datasets: [{
+                label: 'Response Time (ms)',
+                data: [120, 180, 90, 150],
+                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                borderColor: '#007bff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // System Health (placeholder - would be populated with real data)
+    document.getElementById('systemHealth').innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Server Status</h3>
+                <div style="background: #d4edda; color: #155724; padding: 0.5rem; border-radius: 4px;">
+                    <strong>Online</strong> - All systems operational
+                </div>
+            </div>
+            <div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Database</h3>
+                <div style="background: #d4edda; color: #155724; padding: 0.5rem; border-radius: 4px;">
+                    <strong>Healthy</strong> - 15ms avg query time
+                </div>
+            </div>
+            <div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Cache</h3>
+                <div style="background: #d4edda; color: #155724; padding: 0.5rem; border-radius: 4px;">
+                    <strong>85%</strong> hit rate
+                </div>
+            </div>
+            <div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">API</h3>
+                <div style="background: #d4edda; color: #155724; padding: 0.5rem; border-radius: 4px;">
+                    <strong>Operational</strong> - 150ms avg response
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Fetch real-time data every 30 seconds
+    function fetchRealTimeData() {
+        fetch('/monitoring/api/stats/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update charts with new data
+                console.log('Updated monitoring data:', data);
+                // In a real implementation, you would update the charts here
+            })
+            .catch(error => {
+                console.error('Error fetching monitoring data:', error);
+            });
+    }
+    
+    // Uncomment to enable real-time updates
+    // setInterval(fetchRealTimeData, 30000);
+</script>
+{% endblock %}

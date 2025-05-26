@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="hero-section bg-primary text-white py-5 mb-5 rounded">
+    <div class="container text-center">
+        <h1 class="display-4">{{ page.title }}</h1>
+        {% if page.intro %}
+            <p class="lead">{{ page.intro|richtext }}</p>
+        {% endif %}
+        <a href="/blog/" class="btn btn-light btn-lg">Read Our Blog</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        {% if page.body %}
+            {{ page.body }}
+        {% endif %}
+        
+        <h2>Latest Blog Posts</h2>
+        <div class="row">
+            <!-- This would be populated by a custom method or template tag -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Welcome to MKT</h5>
+                        <p class="card-text">Explore our blog for the latest insights and updates.</p>
+                        <a href="/blog/" class="btn btn-primary">Visit Blog</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Links</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><a href="/blog/" class="text-decoration-none">📝 Blog</a></li>
+                    <li><a href="/blog/api/posts/" class="text-decoration-none">🔌 API</a></li>
+                    <li><a href="/admin/" class="text-decoration-none">⚙️ Admin</a></li>
+                    {% if user.is_staff %}
+                    <li><a href="/monitoring/dashboard/" class="text-decoration-none">📊 Monitoring</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>System Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span>Django:</span>
+                    <span class="badge bg-success">Online</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Database:</span>
+                    <span class="badge bg-success">Connected</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Monitoring:</span>
+                    <span class="badge bg-success">Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

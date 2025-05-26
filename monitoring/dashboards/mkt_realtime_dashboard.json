@@ -1,0 +1,142 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "MKT Django Real-Time Monitoring",
+    "tags": ["django", "mkt", "realtime"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "HTTP Requests Rate (per second)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(django_http_requests_total[1m])",
+            "legendFormat": "{{method}} requests/sec",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "unit": "reqps"
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Total HTTP Requests",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "django_http_requests_total",
+            "legendFormat": "{{method}} {{status}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Response Status Codes",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "django_http_requests_total",
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Active Database Connections",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "django_db_connections_total",
+            "legendFormat": "DB Connections",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "HTTP Requests Over Time",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(django_http_requests_total[5m])",
+            "legendFormat": "{{method}} {{handler}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Database Query Rate",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(django_db_execute_total[5m])",
+            "legendFormat": "DB Queries/sec",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "Cache Operations",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(django_cache_get_total[5m])",
+            "legendFormat": "Cache Gets/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(django_cache_set_total[5m])",
+            "legendFormat": "Cache Sets/sec",
+            "refId": "B"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ],
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "refresh": "5s",
+    "schemaVersion": 30,
+    "version": 1
+  }
+}
