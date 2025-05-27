@@ -70,6 +70,7 @@ THIRD_PARTY_APPS = [
     'wagtailcache',
     'django_filters',
     'django_prometheus',
+    'channels',
 ]
 
 LOCAL_APPS = [
@@ -325,8 +326,92 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'communication': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Communication Module Settings
+COMMUNICATION_SETTINGS = {
+    'PROTOCOLS': {
+        'A2A': {
+            'enabled': True,
+            'version': '1.0',
+            'transport': 'http',
+            'auth_required': True,
+            'max_message_size': 10 * 1024 * 1024,
+            'DEFAULT_TIMEOUT': 30,
+            'ENCRYPTION_REQUIRED': True,
+        },
+        'ACP': {
+            'enabled': True,
+            'version': '1.0',
+            'transport': 'rest',
+            'auth_required': True,
+            'discovery_enabled': True,
+            'DEFAULT_TIMEOUT': 60,
+            'MAX_QUEUE_SIZE': 10000,
+            'MESSAGE_TTL': 86400,
+        },
+        'ANP': {
+            'enabled': True,
+            'version': '1.0',
+            'transport': 'websocket',
+            'encryption_required': True,
+            'did_auth': True,
+            'DISCOVERY_INTERVAL': 30,
+            'HEARTBEAT_INTERVAL': 10,
+            'MAX_PEERS': 50,
+        }
+    },
+    'TRANSPORTS': {
+        'WEBSOCKET': {
+            'ENABLED': True,
+            'MAX_CONNECTIONS': 1000,
+            'HEARTBEAT_INTERVAL': 30,
+        },
+        'HTTP': {
+            'ENABLED': True,
+            'RATE_LIMIT': '100/minute',
+            'MAX_REQUEST_SIZE': 10 * 1024 * 1024,  # 10MB
+        },
+        'MQTT': {
+            'ENABLED': False,
+            'BROKER_URL': 'mqtt://localhost:1883',
+            'QOS_LEVEL': 1,
+        }
+    },
+    'SECURITY': {
+        'rate_limit': '100/minute',
+        'max_connections': 1000,
+        'tls_required': True,
+        'jwt_secret': config('COMMUNICATION_JWT_SECRET', default='change-me'),
+        'ENCRYPTION_ALGORITHM': 'AES-256-GCM',
+        'KEY_EXCHANGE_ALGORITHM': 'ECDH',
+        'SIGNATURE_ALGORITHM': 'Ed25519',
+        'TLS_VERSION': '1.3',
+    },
+    'MONITORING': {
+        'metrics_enabled': True,
+        'logging_level': 'INFO',
+        'trace_requests': True,
+    }
+}
+
+# WebSocket Settings for real-time communication
+ASGI_APPLICATION = 'mkt.asgi.application'
+
+# Channels (for WebSocket support)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [config('REDIS_URL', default='redis://localhost:6379/0')],
+        },
+    },
+}

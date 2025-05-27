@@ -20,7 +20,10 @@ urlpatterns = [
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
     # Monitoring URLs
     path("monitoring/", include("monitoring.urls", namespace="monitoring")),
-    
+    path('communication/', include('communication.urls')),
+    path('api/v1/blog/', include('blog.api_urls')),
+    path('api/v1/monitoring/', include('monitoring.api_urls')),
+    path('api/v1/communication/', include('communication.api_urls')), 
     # Prometheus metrics
     path('', include('django_prometheus.urls')),
     
